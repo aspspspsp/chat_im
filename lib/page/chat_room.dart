@@ -110,7 +110,7 @@ class _ChatRoomState extends ConsumerState<ChatRoom> {
     return TextField(
       controller: textEditingController,
       //文字超出範圍自動換行
-      maxLines: null,
+      maxLines: 5,
       minLines: 1,
       decoration: InputDecoration(
           border: InputBorder.none,
