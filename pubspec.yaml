@@ -56,6 +56,9 @@ dependencies:
   #語系及時間
   intl: ^0.18.1
 
+  #toast元件
+  fluttertoast: ^8.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

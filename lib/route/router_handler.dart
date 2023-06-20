@@ -1,11 +1,17 @@
 import 'package:chat_im/page/chat_list.dart';
 import 'package:chat_im/page/chat_room.dart';
+import 'package:chat_im/page/login.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 //Handler配置
 //首頁
 var rootHandler = Handler(handlerFunc: (BuildContext? context, params) {
+  return const Login();
+});
+
+//聊天列表
+var chatListHandler = Handler(handlerFunc: (BuildContext? context, params) {
   return const ChatList();
 });
 

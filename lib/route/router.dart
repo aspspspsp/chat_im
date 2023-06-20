@@ -10,6 +10,7 @@ class Application {
 // 路由配置
 class Routers {
   static const String root = "/";
+  static const String chatList = "/chatList";
   static const String chatRoom = "/chatRoom";
 
   static void configureRoutes(FluroRouter router) {
@@ -22,6 +23,9 @@ class Routers {
     //路由定義
     //首頁
     router.define(root, handler: rootHandler);
+    //聊天列表
+    router.define(chatList,
+        handler: chatListHandler, transitionType: TransitionType.fadeIn);
     //聊天室房間
     router.define(chatRoom,
         handler: chatRoomHandler, transitionType: TransitionType.fadeIn);
