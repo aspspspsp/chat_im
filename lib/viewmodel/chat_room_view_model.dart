@@ -82,6 +82,7 @@ class ChatRoomViewModel extends ChangeNotifier {
   loadMore() async {
     await Future.delayed(const Duration(seconds: 2));
     refreshController.loadComplete();
+    notifyListeners();
   }
 
   //移除所有資料
