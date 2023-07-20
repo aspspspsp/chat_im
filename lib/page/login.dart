@@ -1,9 +1,13 @@
-import 'package:chat_im/route/router.dart';
 import 'package:chat_im/utils/keyboard_hide_widget.dart';
 import 'package:chat_im/utils/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../model/login_data.dart';
+import '../route/router.dart';
+import '../viewmodel/login_view_model.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -17,6 +21,9 @@ class _LoginState extends ConsumerState<Login> {
   bool isShowPwd = false;
   TextEditingController accountController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  //註冊聊天室房間的provider
+  final userProvider = ChangeNotifierProvider<LoginViewModel>((ref) => LoginViewModel());
 
   @override
   void initState() {
@@ -54,11 +61,20 @@ class _LoginState extends ConsumerState<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo
+                Image.asset(
+                  "assets/img/logo.jpg",
+                  width: 100,
+                  height: 100,
+                ),
                 //帳號輸入框
                 TextField(
                   controller: accountController,
                   keyboardType: TextInputType.text,
                   maxLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')), // 只允许输入英文字母和数字
+                  ],
                   decoration: const InputDecoration(
                     hintText: "帳號",
                   ),
@@ -95,9 +111,10 @@ class _LoginState extends ConsumerState<Login> {
                       color: Colors.white,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     String account = accountController.text;
                     String password = passwordController.text;
+
                     if (account.isEmpty) {
                       showToast("請輸入帳號");
                       return;
@@ -106,9 +123,28 @@ class _LoginState extends ConsumerState<Login> {
                       showToast("請輸入密碼");
                       return;
                     }
-                    //跳轉聊天列表
-                    Application.router.navigateTo(context, Routers.chatList,
-                        clearStack: true);
+
+                    LoginData loginResult = await ref.read(userProvider.notifier).login(account, password);
+                    print(loginResult.success);
+                    if (loginResult.success == true) {
+                      Application.router.navigateTo(context, Routers.chatList, clearStack: true);
+                    } else {
+                      showDialog(context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('登入失敗'),
+                              content: Text('請檢查帳號和密碼是否正確'),
+                              actions: [
+                                TextButton(
+                                  child: Text('確定'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // 關閉對話框
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    }
                   },
                 ),
               ],

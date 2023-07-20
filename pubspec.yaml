@@ -59,6 +59,9 @@ dependencies:
   #toast元件
   fluttertoast: ^8.2.2
 
+  # API
+  dio: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
